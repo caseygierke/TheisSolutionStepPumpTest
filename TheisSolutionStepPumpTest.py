@@ -172,9 +172,11 @@ Q5 = 40				# Pumping rate              [gpm]
 rin = 5000       # Radius                    [ft]
 r = int(math.ceil(10*math.log(rin,10)))
 # r= 36
-r = range((10*r)+1)        # All of this takes the input and
+r = range(r+1)        # All of this takes the input and
+# r = range((10*r)+1)        # All of this takes the input and
 r = np.array(r)     # makes a log scale array up to the domain value
-r = r/100.0
+r = r/10.0
+# r = r/100.0
 r = 10**r
 
 # Define time array
@@ -226,7 +228,30 @@ for i in range(0, len(t)):      # for time steps
 			s[i][j] = 0
 # Convert to a numpy array so time can be plotted
 s = np.array(s)
-				
+
+# Find contour distances
+# Open file to write contours to
+foutContour = open(path+os.sep+'Outfile- Contours.txt','w')
+
+# Define contours desired
+contours = range(11)
+contours[0] = 0.5
+for contour in contours:
+	# Initialize counter and array to store values
+	DDst = []
+	z = 0
+	for DD in s[94]:
+		DDst.append(DD)
+		if DD < contour:
+			m = (s[94][z]-s[94][z-1]) / (r[z]-r[z-1])
+			b = s[94][z] - m*r[z]
+			R = (contour - b)/m
+			foutContour.write(str(contour)+'\t'+str(R)+'\n')
+			# foutContour.write(str(contour)+'\t'+str(R)+'\t'+str(r[z-1])+'\t'+str(DDst[z-1])+'\t'+str(r[z])+'\t'+str(DDst[z])+'\n')
+			break
+		z = z+1
+foutContour.close()
+
 # ------------------------------------------------------
 ## OUTPUTS
 # ------------------------------------------------------
@@ -283,7 +308,8 @@ plt.legend(times, loc=0) # 4 is LR, 0 is best
 ax2 = fig.add_subplot(212)
 # ax2.plot(ttime,s1[:,19],'o-r', linewidth = .75, markersize=3, markeredgecolor='r', markeredgewidth='0.5', fillstyle='none')
 # ax2.plot(ttime,s5[:,19],'o-c', linewidth = .75, markersize=3, markeredgecolor='c', markeredgewidth='0.5', fillstyle='none')
-ax2.plot(ttime,s[:,190],'o-k', linewidth = .75, markersize=3, markeredgecolor='b', markeredgewidth='0.5', fillstyle='none')
+ax2.plot(ttime,s[:,19],'o-k', linewidth = .75, markersize=3, markeredgecolor='b', markeredgewidth='0.5', fillstyle='none')
+# ax2.plot(ttime,s[:,190],'o-k', linewidth = .75, markersize=3, markeredgecolor='b', markeredgewidth='0.5', fillstyle='none')
 
 # Now lets do stuff to the plot
 
