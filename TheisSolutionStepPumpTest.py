@@ -1,6 +1,7 @@
 # TheisSolutionStepPumpTest.py
 
-# This code similates pumping induced drawdown for designing a pump test
+# This code similates pumping induced drawdown 
+# for a stepped pump test
 
 # Scripted by Casey Gierke of Lee Wilson & Associates on 7/2/2013.
 # Updated 10/9/2013
@@ -137,11 +138,13 @@ def Theis(Q, S, T, r, t):
 
 # Define path
 path = os.path.abspath(os.path.dirname(__file__))
-# # Shorten path to one folder up
-# path = path[:find_last(path,os.sep)]
+
+PumpingWell = 'R-01'
+ObservationWell = 'I-01'
 
 # Read in well info
 WellsIn = open(path+os.sep+'Wells.txt','r')
+
 # Create Wells dictionary
 Wells = {}
 for line in WellsIn:
@@ -150,8 +153,8 @@ for line in WellsIn:
 	Wells[line[:x1]] = [line[x1+1:x2], line[x2+1:-1]]
 	
 # Find distance to FCI observation wells
-WellQ = Wells['R-01']
-WellObs = Wells['I-01']
+WellQ = Wells[PumpingWell]
+WellObs = Wells[ObservationWell]
 Robs = math.sqrt((float(WellQ[0])-float(WellObs[0]))**2 + (float(WellQ[1])-float(WellObs[1]))**2)
 
 # Parameters to adjust
@@ -231,7 +234,7 @@ s = np.array(s)
 
 # Find contour distances
 # Open file to write contours to
-foutContour = open(path+os.sep+'Outfile- Contours.txt','w')
+foutContour = open(path+os.sep+PumpingWell+'- Outfile- Contours.txt','w')
 
 # Define contours desired
 contours = range(11)
@@ -258,12 +261,12 @@ foutContour.close()
 
 # For time in hours
 times = [
-			str((ttime[4]))+' hours', 
-			str((ttime[9]))+' hours',
+			# str((ttime[4]))+' hours', 
+			# str((ttime[9]))+' hours',
 			str((ttime[14]))+' hours', 
 			str((ttime[94]))+' hours',
 			str((ttime[95]))+' hours', 
-			str((ttime[109]))+' hours', 
+			# str((ttime[109]))+' hours', 
 			str((ttime[194]))+' hours'
 			]
 
@@ -272,12 +275,12 @@ fig = plt.figure()
 
 # Drawdown vs. distance plot
 ax1 = fig.add_subplot(211)
-ax1.plot(r,s[4],'.k', linewidth = .75)
-ax1.plot(r,s[9],'-.k', linewidth = .75)
+# ax1.plot(r,s[4],'.k', linewidth = .75)
+# ax1.plot(r,s[9],'-.k', linewidth = .75)
 ax1.plot(r,s[14],'o-k', linewidth = .75, markersize=3, markeredgecolor='c', markeredgewidth='0.5', fillstyle='none')
 ax1.plot(r,s[94],'-k', linewidth = .75)
 ax1.plot(r,s[95],'.b', linewidth = .75)
-ax1.plot(r,s[109],'-.b', linewidth = .75)
+# ax1.plot(r,s[109],'-.b', linewidth = .75)
 ax1.plot(r,s[194],'-.r', linewidth = .75)
 
 
