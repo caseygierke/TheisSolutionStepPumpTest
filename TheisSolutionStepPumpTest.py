@@ -47,7 +47,7 @@ def find_nth(haystack, needle, n):
 def Theis(Q, S, T, r, t):
 	
 	# Create a file to write to
-	fout = open(path+os.sep+'Outfile- '+str(Q)+' gpm.txt','w')
+	# fout = open(path+os.sep+'Outfile- '+str(Q)+' gpm.txt','w')
 	# foutU = open(path+os.sep+'OutfileU- '+str(Q)+' gpm.txt','w')
 	# foutWu = open(path+os.sep+'OutfileWu- '+str(Q)+' gpm.txt','w')
 	# foutS = open(path+os.sep+'OutfileSeq- '+str(Q)+' gpm.txt','w')
@@ -89,19 +89,19 @@ def Theis(Q, S, T, r, t):
 	# distances and (-) drawdowns)
 	for i in range(0, len(t)):      # for time steps
 		# Write the distance from the well at the top of the file
-		if i == 0:
-			for entry in r:
-				fout.write('\t'+str(entry))
+		# if i == 0:
+			# for entry in r:
+				# fout.write('\t'+str(entry))
 				# foutU.write('\t'+str(entry))
 				# foutWu.write('\t'+str(entry))
 				# foutS.write('\t'+str(entry))
-			fout.write('\n')
+			# fout.write('\n')
 			# foutU.write('\n')
 			# foutWu.write('\n')
 			# foutS.write('\n')
 		
 		# Write the time at beginning of line	
-		fout.write(str(ttime[i])+'\t'+str(s[i][0])+'\t')
+		# fout.write(str(ttime[i])+'\t'+str(s[i][0])+'\t')
 		# foutU.write(str(ttime[i])+'\t'+str(u[i][0])+'\t')
 		# foutWu.write(str(ttime[i])+'\t'+str(Wu[i][0])+'\t')
 		# foutS.write(str(ttime[i])+'\t'+str(Wu[i][0])+'\t')
@@ -116,15 +116,15 @@ def Theis(Q, S, T, r, t):
 				# print('s[i][j]= ',i,j,s[i][j])
 				# print('s[i][j-1]= ',i,j-1,s[i][j-1])
 				s[i][j] = 0
-			fout.write(str(s[i][j])+'\t')
+			# fout.write(str(s[i][j])+'\t')
 			# foutU.write(str(u[i][j])+'\t')
 			# foutWu.write(str(Wu[i][j])+'\t')
 			# foutS.write(str(Wu[i][j])+'\t')
-		fout.write('\n')
+		# fout.write('\n')
 		# foutU.write('\n')
 		# foutWu.write('\n')
 		# foutS.write('\n')
-	fout.close()
+	# fout.close()
 	# foutU.close()
 	# foutWu.close()
 	# foutS.close()
@@ -138,9 +138,32 @@ def Theis(Q, S, T, r, t):
 
 # Define path
 path = os.path.abspath(os.path.dirname(__file__))
+# Shorten path to one folder up for figures
+figurePath = path[:find_last(path,os.sep)]+os.sep+'Figures'+os.sep
 
+# Specify which well you want to analyze
 PumpingWell = 'R-01'
-ObservationWell = 'I-01'
+# PumpingWell = 'R-03'
+# PumpingWell = 'R-05'
+# PumpingWell = 'R-07'
+
+# Define parameters based on the pumping well
+if PumpingWell == 'R-01':
+	T = 622
+	S = .0033
+	ObservationWell = 'I-01'
+elif PumpingWell == 'R-03':
+	T = 988
+	S = .0032
+	ObservationWell = 'I-02'
+elif PumpingWell == 'R-05':
+	T = 722
+	S = .0038
+	ObservationWell = 'I-03'
+elif PumpingWell == 'R-07':
+	T = 773
+	S = .0041
+	ObservationWell = 'I-04'
 
 # Read in well info
 WellsIn = open(path+os.sep+'Wells.txt','r')
@@ -158,10 +181,10 @@ WellObs = Wells[ObservationWell]
 Robs = math.sqrt((float(WellQ[0])-float(WellObs[0]))**2 + (float(WellQ[1])-float(WellObs[1]))**2)
 
 # Parameters to adjust
-T = 622             # Transmissivity            [ft^2/day] 1000 for difference from average year
+# T = 622             # Transmissivity            [ft^2/day] 1000 for difference from average year
 # T = K*b             # Transmissivity            [ft^2/day] 1000 for difference from average year
 # S = Ss*b             # Storage coefficient       [-]
-S = 0.0033            # Storage coefficient       [-]
+# S = 0.0033            # Storage coefficient       [-]
 So = 0             # Observed drawdown         [ft]
 
 # Define all the discharges for steps
@@ -297,6 +320,7 @@ plt.gca().invert_yaxis()    # Invert the y axis
 plt.xlabel('Distance from pumping well [ft]', fontsize=12)
 plt.ylabel('Drawdown [ft]', fontsize=12)
 plt.legend(times, loc=0) # 4 is LR, 0 is best
+ax1.set_xlim(0,800)
 # ax1.set_xscale('log')
 
 # # Axis labels
@@ -317,11 +341,11 @@ ax2.plot(ttime,s[:,19],'o-k', linewidth = .75, markersize=3, markeredgecolor='b'
 # Now lets do stuff to the plot
 
 plt.gca().invert_yaxis()    # Invert the y axis
-title = str('Drawdown: S = ')+str(S)+str(', T = ')+str(T)
+title = str(PumpingWell+' Drawdown: T = ')+str(T)+str(', S = ')+str(S)
 fig.suptitle(title, fontsize=14) 
 plt.xlabel('Time [hours]', fontsize=12)
 plt.ylabel('Drawdown [ft]', fontsize=12)
-Legend2 = ['Drawdown at '+str(round(r[19],1))+' ft',]
+Legend2 = ['Drawdown at '+ObservationWell,]
 plt.legend(Legend2, loc=0) # 4 is LR, 0 is best
 
 # # Axis labels
@@ -371,6 +395,16 @@ ax.plot(r,Wu[2], 'o-')
 ax.plot(r,Wu[3], 'o-')
 plt.legend(t, fontsize=12, loc=0)
 '''
+
+fig.set_size_inches(8.5,6.5)
+# fig.subplots_adjust(hspace=.2)
+# legend = ax1.legend(frameon = 1)
+# frame = legend.get_frame()
+# frame.set_facecolor('w')
+# frame.set_edgecolor('k')
+# plt.subplots_adjust(top=.95, bottom=.38, right=.9)
+
+fig.savefig(figurePath+PumpingWell+' Drawdowns.png',dpi=500)
 
 plt.show()
 

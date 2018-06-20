@@ -51,7 +51,10 @@ def find_nth(haystack, needle, n):
 # ------------------------------------------------------
 
 # Define which well you are analyzing
-Well = 'R-01'
+# Well = 'R-01'
+Well = 'R-03'
+# Well = 'R-05'
+# Well = 'R-07'
 
 # Define path
 path = os.path.abspath(os.path.dirname(__file__))
@@ -67,10 +70,10 @@ Wells = {
 		"R-07": [647763.998,746084.498], 
 		}
 
-# set up the shapefile driver
+# Set up the shapefile driver
 driver = ogr.GetDriverByName("ESRI Shapefile")
 
-# create the spatial reference, WGS84
+# Create the spatial reference, WGS84
 srs = osr.SpatialReference()
 srs.ImportFromEPSG(26749)
 
